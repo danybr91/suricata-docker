@@ -1,0 +1,19 @@
+version: '2.3'
+
+services:
+# Suricata service
+  suricata:
+    build: .
+    container_name: suricata
+    restart: always
+    network_mode: "host"
+    cap_add:
+     - NET_ADMIN
+     - SYS_NICE
+     - NET_RAW
+    image: ""
+    volumes:
+     - /var/log/suricata:/var/log/suricata
+	- /etc/suricata:/etc/suricata
+
+#Ref: https://github.com/dtag-dev-sec/tpotce

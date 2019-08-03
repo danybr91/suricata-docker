@@ -1,0 +1,2 @@
+# Cron update of suricata IDS/IPS
+@daily   root    suricata-update
