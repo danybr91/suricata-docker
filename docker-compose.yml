@@ -14,6 +14,6 @@ services:
     image: ""
     volumes:
      - /var/log/suricata:/var/log/suricata
-	- /etc/suricata:/etc/suricata
+     - /etc/suricata:/etc/suricata
 
 #Ref: https://github.com/dtag-dev-sec/tpotce

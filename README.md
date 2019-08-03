@@ -2,17 +2,12 @@
 
 ## Build
 
-La opción por defecto usa alpine linux como base, que es mucho más ligera:
+Recomiendo usar la version de alpine, que es mucho más ligera:
 	
-	docker build
-
-También dispones de una versión basada en ubuntu:
-
-	docker build -f Dockerfile.*
-
+	docker build . -f Dockerfile.* -t suricata
 ## Usage
 
-    docker run -it --net=host jasonish/suricata -i <interface>
+    docker run -it --net=host suricata -i <interface>
 
 O a través de docker compose (en construcción)
 

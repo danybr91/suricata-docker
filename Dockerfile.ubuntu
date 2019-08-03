@@ -9,13 +9,15 @@ RUN  echo "deb http://ppa.launchpad.net/oisf/suricata-stable/ubuntu xenial main"
 # Instalar suricata
 RUN  apt-get update && \
 	apt-get install -y suricata && \
-	systemctl stop suricata.service
+	service suricata stop
 
 # Configurar suricata
 WORKDIR /etc/suricata
 
 COPY . suricata.yaml
 COPY . /custom-rules
+
+# RUN
 CMD suricata -c /etc/suricata/suricata.yaml
 
 #Ref:

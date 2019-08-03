@@ -77,6 +77,9 @@ WORKDIR /etc/suricata
 COPY . suricata.yaml
 COPY . /custom-rules
 
+# RUN
+CMD suricata -c /etc/suricata/suricata.yaml
+
 #Ref:
 #https://github.com/dtag-dev-sec/tpotce/tree/master/docker/suricata
 #https://docs.docker.com/get-started/
