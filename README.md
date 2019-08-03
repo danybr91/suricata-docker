@@ -22,6 +22,6 @@ O a través de docker compose (en construcción)
 
 Expone los logs de suricata.
 
-## /etc/suricata
+### /etc/suricata
 
 Expone la configuración de suricata.
