@@ -72,13 +72,13 @@ RUN mkdir -p /opt/suricata/ && \
     make install && \
     make install-full
 
-# Configuración
-WORKDIR /etc/suricata
-COPY . suricata.yaml
-COPY . /custom-rules
+# Configurar suricata
+COPY update.cron /etc/cron.d/
+COPY config/ /etc/suricata/
 
-# RUN
-CMD suricata -c /etc/suricata/suricata.yaml
+# Inicio del contenedor
+ENTRYPOINT [ "/usr/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
+CMD [ "--af-packet" ]
 
 #Ref:
 #https://github.com/dtag-dev-sec/tpotce/tree/master/docker/suricata
