@@ -6,21 +6,25 @@ FROM ubuntu:16.04
 RUN  echo "deb http://ppa.launchpad.net/oisf/suricata-stable/ubuntu xenial main" >> /etc/apt/source.list && \
 	echo "deb-src http://ppa.launchpad.net/oisf/suricata-stable/ubuntu xenial main" >> /etc/apt/source.list && \
 	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9F6FC9DDB1324714B78062CBD7F87B2966EB736F && \
-	apt-get update && \
-	apt-get install -y suricata
+	DEBIAN_FRONTEND=noninteractive apt-get update && \
+	DEBIAN_FRONTEND=noninteractive apt-get install -y suricata
 
 # Configurar suricata
+WORKDIR /etc/cron.d
+COPY update.cron suricata.update
+
 WORKDIR /etc/suricata
+COPY config/ .
 
-COPY . suricata.yaml
-COPY . /custom-rules
-
-# RUN
 # Por defecto, en la imagen el servicio suricata está deshabilitado a no ser que se modifique
 # el fichero /etc/default/suricata. En el contenedor no es necesario utilizar el sevicio y se
 # ejecuta directamente. Todos los ajustes del servicio se controlan con el fichero de configuración.
-CMD suricata -c /etc/suricata/suricata.yaml
+
+# Actualiza y ejecuta suricata
+CMD suricata-update && suricata -c /etc/suricata/suricata.yaml
 
 #Ref:
 #https://docs.docker.com/get-started/
 #https://docs.docker.com/get-started/part2
+#https://github.com/deepgram/suricata/blob/master/Dockerfile
+#https://github.com/0ortmann/suricata-docker/blob/master/Dockerfile
