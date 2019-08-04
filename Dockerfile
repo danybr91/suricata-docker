@@ -22,8 +22,8 @@ RUN  apk -U --no-cache add \
 		pcre \
 		py-yaml \
 		python2 \
-		python3 \
-		py3-pip \
+		#python3 \
+		#py3-pip \
 		yaml \
 		zlib \
 		# openresty \
@@ -94,7 +94,6 @@ RUN rm -r /opt/suricata && \
     rm /suricata-4.1.4.tar.gz && \
     apk -U --no-cache del \
 		tzdata \
-		python2 \
 		automake \
 		autoconf \
 		file-dev \
