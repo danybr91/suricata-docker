@@ -1,15 +1,13 @@
 # Imagen base
 FROM ubuntu:16.04
 
+# Instalar suricata
 # Agregar el repositorio PPA: https://launchpad.net/~oisf/+archive/ubuntu/suricata-stable  
 RUN  echo "deb http://ppa.launchpad.net/oisf/suricata-stable/ubuntu xenial main" >> /etc/apt/source.list && \
 	echo "deb-src http://ppa.launchpad.net/oisf/suricata-stable/ubuntu xenial main" >> /etc/apt/source.list && \
-	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9F6FC9DDB1324714B78062CBD7F87B2966EB736F
-
-# Instalar suricata
-RUN  apt-get update && \
-	apt-get install -y suricata && \
-	service suricata stop
+	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9F6FC9DDB1324714B78062CBD7F87B2966EB736F && \
+	apt-get update && \
+	apt-get install -y suricata
 
 # Configurar suricata
 WORKDIR /etc/suricata
@@ -18,6 +16,9 @@ COPY . suricata.yaml
 COPY . /custom-rules
 
 # RUN
+# Por defecto, en la imagen el servicio suricata está deshabilitado a no ser que se modifique
+# el fichero /etc/default/suricata. En el contenedor no es necesario utilizar el sevicio y se
+# ejecuta directamente. Todos los ajustes del servicio se controlan con el fichero de configuración.
 CMD suricata -c /etc/suricata/suricata.yaml
 
 #Ref:
