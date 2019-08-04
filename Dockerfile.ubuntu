@@ -12,21 +12,16 @@ RUN  echo "deb http://ppa.launchpad.net/oisf/suricata-stable/ubuntu xenial main"
 	python3 -m pip install --no-cache-dir suricata-update
 
 # Configurar suricata
-WORKDIR /etc/cron.d
-COPY update.cron suricata.update
-
-WORKDIR /etc/suricata
-COPY config/ .
-
-COPY entrypoint.sh /bin/suricata-entrypoint
-RUN chmod +x suricata-entrypoint
+COPY update.cron /etc/cron.d/
+COPY config/ /etc/suricata/
 
 # Por defecto, en la imagen el servicio suricata está deshabilitado a no ser que se modifique
 # el fichero /etc/default/suricata. En el contenedor no es necesario utilizar el sevicio y se
 # ejecuta directamente. Todos los ajustes del servicio se controlan con el fichero de configuración.
 
 # Inicio del contenedor
-ENTRYPOINT [ "/bin/suricata-entrypoint" ]
+ENTRYPOINT [ "/usr/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
+CMD [ "--af-packet" ]
 
 #Ref:
 #https://docs.docker.com/get-started/
