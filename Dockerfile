@@ -21,11 +21,12 @@ RUN  apk -U --no-cache add \
 		nss \
 		pcre \
 		py-yaml \
+		python2 \
 		python3 \
 		py3-pip \
 		yaml \
 		zlib \
-		openresty \
+		# openresty \
 		ca-certificates \
 		wget \
 		curl \
@@ -33,7 +34,7 @@ RUN  apk -U --no-cache add \
 		autoconf \
 		file-dev \
 		build-base \
-          cargo \
+		cargo \
 		geoip-dev \
 		hiredis-dev \
 		jansson-dev \
@@ -60,25 +61,24 @@ RUN  apk -U --no-cache add \
 RUN mkdir -p /opt/suricata/ && \
     wget https://www.openinfosecfoundation.org/download/suricata-4.1.4.tar.gz && \
     tar xvfz suricata-4.1.4.tar.gz --strip-components=1 -C /opt/suricata/ && \
-    rm suricata-4.1.4.tar.gz && \
-    cd /opt/suricata && \
-    ./configure \
-	--prefix=/usr
-	--sysconfig=/etc
-	--localstatedir=/var
+    rm suricata-4.1.4.tar.gz
+WORKDIR /opt/suricata
+RUN ./configure \
+	--sysconfdir=/etc \
+	--localstatedir=/var \
 	--disable-gccmarch-native \
 	--enable-nfqueue \
-     #--disable-rust \
+	#--disable-rust \
 	--enable-hiredis \
 	--enable-gccprotect \
 	--enable-pie \
-	--enable-lua \
+	#--enable-lua \
 	--enable-geoip \
 	--enable-luajit \
     && make && \
     make check && \
-    make install
-    #make install-full
+    make install && \
+    make install-full
 
 # Configurar suricata
 COPY update.cron /etc/cron.d/

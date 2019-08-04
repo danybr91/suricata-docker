@@ -1,24 +1,25 @@
+# ERROR: The PPA instala la version 3.0. La versión de alpine usa la 4.1.4 y es compatible con la configuración
 # Imagen base
-FROM ubuntu:16.04
+#FROM ubuntu:16.04
 
 # Instalar suricata
 # Agregar el repositorio PPA: https://launchpad.net/~oisf/+archive/ubuntu/suricata-stable  
-RUN  echo "deb http://ppa.launchpad.net/oisf/suricata-stable/ubuntu xenial main" >> /etc/apt/source.list && \
-	echo "deb-src http://ppa.launchpad.net/oisf/suricata-stable/ubuntu xenial main" >> /etc/apt/source.list && \
-	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9F6FC9DDB1324714B78062CBD7F87B2966EB736F && \
-	DEBIAN_FRONTEND=noninteractive apt-get update && \
-	DEBIAN_FRONTEND=noninteractive apt-get install -y python3 python3-pip suricata && \
-	python3 -m pip install --no-cache-dir --upgrade pip && \
-	python3 -m pip install --no-cache-dir suricata-update
+#RUN  echo "deb http://ppa.launchpad.net/oisf/suricata-stable/ubuntu xenial main" >> /etc/apt/source.list && \
+#	echo "deb-src http://ppa.launchpad.net/oisf/suricata-stable/ubuntu xenial main" >> /etc/apt/source.list && \
+#	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9F6FC9DDB1324714B78062CBD7F87B2966EB736F && \
+#	DEBIAN_FRONTEND=noninteractive apt-get update && \
+#	DEBIAN_FRONTEND=noninteractive apt-get install -y python3 python3-pip suricata && \
+#	python3 -m pip install --no-cache-dir --upgrade pip && \
+#	python3 -m pip install --no-cache-dir suricata-update
 
 # Configurar suricata
-COPY update.cron /etc/cron.d/
-COPY config/ /etc/suricata/
+#COPY update.cron /etc/cron.d/
+#COPY config/ /etc/suricata/
 
 # Inicio del contenedor
-STOPSIGNAL SIGINT
-ENTRYPOINT [ "/usr/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
-CMD [ "--af-packet" ]
+#STOPSIGNAL SIGINT
+#ENTRYPOINT [ "/usr/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
+#CMD [ "--af-packet" ]
 
 #Ref:
 #https://docs.docker.com/get-started/

@@ -43,14 +43,15 @@ sources:
   # Emerging Threats Open with the Suricata version dynamically replaced.
   - https://rules.emergingthreats.net/open/suricata-%(__version__)s/emerging.rules.tar.gz
   # The SSL blacklist, which is just a standalone rule file.
-  - https://sslbl.abuse.ch/blacklist/sslblacklist.rules
+  #- https://sslbl.abuse.ch/blacklist/sslblacklist.rules
 
 # A list of local rule sources. Each entry can be a rule file, a
 # directory or a wild card specification.
 local:
   # A directory of rules.
-  - /etc/suricata/rules
+  #- /etc/suricata/rules
   # A single rule file.
-  - /etc/suricata/rules/app-layer-events.rules
+  #- /etc/suricata/rules/app-layer-events.rules
   # A wildcard.
-  - /etc/suricata/rules/*.rules
+  #- /etc/suricata/rules/*.rules
+  - /etc/suricata/rules/local.rules
