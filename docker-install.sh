@@ -25,6 +25,7 @@ case "$dist" in
 	    apt-transport-https \
 	    ca-certificates \
 	    gnupg2 \
+	    curl \
 	    software-properties-common
 	;;
 	*)
