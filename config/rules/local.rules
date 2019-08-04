@@ -1,1 +1,2 @@
-test
+# Test
+alert http any any -> any any (msg:"TEST SUSPICIOUS USER_AGENT"; content:"User-Agent: "; http_header; nocase; content:"TEST SUSPICIOUS"; http_header; distance:0; sid:1; rev:1;)

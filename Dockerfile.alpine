@@ -59,9 +59,9 @@ RUN mkdir -p /opt/suricata/ && \
     rm suricata-4.1.4.tar.gz && \
     cd /opt/suricata && \
     ./configure \
-	 --disable-gccmarch-native
+	--disable-gccmarch-native \
 	--enable-nfqueue \
-       # --disable-rust \
+        --disable-rust \
 	--enable-hiredis \
 	--enable-geoip \
 	--enable-gccprotect \
@@ -69,15 +69,16 @@ RUN mkdir -p /opt/suricata/ && \
 	--enable-luajit \
     && make && \
     make check && \
-    make install && \
-    make install-full
+    make install
+    #make install-full
 
 # Configurar suricata
 COPY update.cron /etc/cron.d/
 COPY config/ /etc/suricata/
 
 # Inicio del contenedor
-ENTRYPOINT [ "/usr/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
+STOPSIGNAL SIGINT
+ENTRYPOINT [ "/usr/local/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
 CMD [ "--af-packet" ]
 
 #Ref:
