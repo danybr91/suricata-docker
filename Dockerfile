@@ -60,8 +60,8 @@ RUN  apk -U --no-cache add \
 # no optimiza el binario para el sistema. Adecuado para instalación portable o VM.
 RUN mkdir -p /opt/suricata/ && \
     wget https://www.openinfosecfoundation.org/download/suricata-4.1.4.tar.gz && \
-    tar xvfz suricata-4.1.4.tar.gz --strip-components=1 -C /opt/suricata/ && \
-    rm suricata-4.1.4.tar.gz
+    tar xvfz suricata-4.1.4.tar.gz --strip-components=1 -C /opt/suricata/
+    
 WORKDIR /opt/suricata
 RUN ./configure \
 	--sysconfdir=/etc \
@@ -84,11 +84,39 @@ RUN ./configure \
 COPY update.cron /etc/cron.d/
 COPY config/ /etc/suricata/
 
+# Limpiar
+RUN rm -r /opt/suricata && \
+    rm ~/suricata-4.1.4.tar.gz && \
+    apk -U --no-cache del \
+		python2 \
+		automake \
+		autoconf \
+		file-dev \
+		build-base \
+		geoip-dev \
+		hiredis-dev \
+		jansson-dev \
+		libtool \
+		libhtp-dev \
+		libcap-ng-dev \
+		luajit-dev \
+		libpcap-dev \
+		libnet-dev \
+		libnetfilter_queue-dev \
+		libnfnetlink-dev \
+		lz4-dev \
+		nss-dev \
+		nspr-dev \
+		pcre-dev \
+		yaml-dev
+
 # Inicio del contenedor
 STOPSIGNAL SIGINT
-ENTRYPOINT [ "/usr/local/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
-CMD [ "--af-packet" ]
+#ENTRYPOINT [ "/usr/local/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
+#CMD [ "--af-packet" ]
 
+#shell available mode
+CMD [ "/usr/local/bin/suricata", "-c", "/etc/suricata/suricata.yaml" "--af-packet" ]
 #Ref:
 #https://github.com/dtag-dev-sec/tpotce/tree/master/docker/suricata
 #https://docs.docker.com/get-started/
