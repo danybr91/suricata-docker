@@ -4,7 +4,8 @@
 
 Recomiendo usar la version de alpine, que es mucho más ligera:
 	
-	docker build . -f Dockerfile.* -t suricata
+	docker build . -t $(cat TAG)
+
 ## Usage
 
     docker run -it --net=host suricata -i <interface>

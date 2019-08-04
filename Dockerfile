@@ -30,6 +30,7 @@ RUN  apk -U --no-cache add \
 		ca-certificates \
 		wget \
 		curl \
+		tzdata \
 		automake \
 		autoconf \
 		file-dev \
@@ -54,6 +55,10 @@ RUN  apk -U --no-cache add \
 		yaml-dev
     #&& python3 -m pip install --no-cache-dir --upgrade pip \
     #&& python3 -m pip install --no-cache-dir suricata-update
+
+# Configurar el sistema
+RUN cp /usr/share/zoneinfo/Europe/Madrid /etc/localtime && \
+    echo "Europe/Brussels" >  /etc/timezone
 
 # Instalar suricata
 # --disable-gccmarch-native
@@ -81,13 +86,14 @@ RUN ./configure \
     make install-full
 
 # Configurar suricata
-COPY update.cron /etc/cron.d/
+COPY update.cron /etc/crontabs/suricata
 COPY config/ /etc/suricata/
 
 # Limpiar
 RUN rm -r /opt/suricata && \
-    rm ~/suricata-4.1.4.tar.gz && \
+    rm /suricata-4.1.4.tar.gz && \
     apk -U --no-cache del \
+		tzdata \
 		python2 \
 		automake \
 		autoconf \
@@ -112,11 +118,12 @@ RUN rm -r /opt/suricata && \
 
 # Inicio del contenedor
 STOPSIGNAL SIGINT
-#ENTRYPOINT [ "/usr/local/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
-#CMD [ "--af-packet" ]
+ENTRYPOINT [ "/usr/local/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
+CMD [ "--af-packet" ]
 
 #shell available mode
-CMD [ "/usr/local/bin/suricata", "-c", "/etc/suricata/suricata.yaml" "--af-packet" ]
+#CMD suricata -c /etc/suricata/suricata.yaml --af-packet=enp0s3
+
 #Ref:
 #https://github.com/dtag-dev-sec/tpotce/tree/master/docker/suricata
 #https://docs.docker.com/get-started/
