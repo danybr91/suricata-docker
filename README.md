@@ -37,3 +37,22 @@ Por defecto el contenedor siempre utiliza el fichero de configuración situado e
 Puedes sobreescribir la configuración indicando un volumen:
 
 	docker run --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW --cap-add=SYS_NICE -v /var/log/suricata:/var/log/suricata -v /data/conf:/etc/suricata -d suricata:latest
+
+Pero procura proporcionar una carpeta con configuración existente o no se ejecutará. Si no tienes ninguna configuración disponible, puedes obtener la carpeta de configuración ejecutando un contenedor sin volumenes y copiando el contenido al host:
+
+	docker cp [nombre de contenedor]:/etc/suricata /host/suricata-config
+
+## Actualizar firmas
+
+El contenedor dispone de una tarea cron que le permite actualizar las firmas de forma regular. Puedes configurar la periocidad editando el archivo update.cron. Adicionalmente, puedes ejecutar una actualización manual en cualquier momento con:
+
+	docker exec -it nice_wilson /usr/local/bin/suricata-update
+
+
+## TODO
+
+- Permitir ejecutar suricata con un usuario limitado.
+- Mejor gestión de la actualización de firmas.
+- Mejor gestión de la configuración.
+- Integración con servicios.
+
