@@ -46,7 +46,7 @@ Pero procura proporcionar una carpeta con configuración existente o no se ejecu
 
 El contenedor dispone de una tarea cron que le permite actualizar las firmas de forma regular. Puedes configurar la periocidad editando el archivo update.cron. Adicionalmente, puedes ejecutar una actualización manual en cualquier momento con:
 
-	docker exec -it nice_wilson /usr/local/bin/suricata-update
+	docker exec -it [nombre de contenedor] /usr/local/bin/suricata-update
 
 
 ## TODO
