@@ -1,0 +1,3 @@
+#!/bin/sh
+# Cron update of suricata IDS/IPS
+/usr/local/bin/suricata-update

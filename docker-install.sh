@@ -1,10 +1,11 @@
 #Script para instalar docker-ce en ubuntu server o debian
-#dist=debian, ubuntu
+#dist=debian, ubuntu, raspbian
 #arch=amd64,armhf,arm64
 #branch=stable,nightly,test
 
 dist=ubuntu
-arch=amd64
+version=$(lsb_release -cs)
+arch=$(dpkg --print-architecture)
 branch=stable
 
 
@@ -19,7 +20,7 @@ case "$dist" in
 	    software-properties-common
 	;;
 
-	debian)
+	debian|raspbian)
 	apt-get update
 	apt-get install -y \
 	    apt-transport-https \
@@ -38,10 +39,13 @@ curl -fsSL "https://download.docker.com/linux/$dist/gpg" | apt-key add -
 # Verificar clave: 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
 apt-key fingerprint 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
 
-add-apt-repository \
-   "deb [arch=$arch] https://download.docker.com/linux/$dist \
-   $(lsb_release -cs) \
-   $branch"
+if [ "$dist" = "ubuntu" ] || [ "$dist" = "debian" ]; then
+	add-apt-repository \
+	   "deb [arch=$arch] https://download.docker.com/linux/$dist \
+	   $version $branch"
+else
+	echo "deb [arch=$arch] https://download.docker.com/linux/$dist $version $branch" > "/etc/apt/sources.list.d/docker.list"
+fi
 
 apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 
