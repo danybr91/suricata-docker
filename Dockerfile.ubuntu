@@ -1,15 +1,19 @@
 # Imagen base
 FROM ubuntu:latest
 
+# Entorno
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TZ="Europe/Madrid"
+
 # Al ejecutar todo en una única línea RUN, evitamos que se generen images con las dependencias transitorias
 # Dependencias del sistema
 RUN apt update && \
-    apt install -y software-properties-common && \
+    apt install -y apt-utils software-properties-common && \
     add-apt-repository ppa:oisf/suricata-stable && \
     apt update; \
-    apt install suricata; \
-    apt remove --purge software-properties-common; \
-    apt autoremove; \
+    apt install -y suricata; \
+    apt remove -y --purge software-properties-common; \
+    apt autoremove -y; \
     apt autoclean
 
 # Configuración
