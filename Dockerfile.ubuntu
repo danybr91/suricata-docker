@@ -8,7 +8,7 @@ RUN apt update && \
     add-apt-repository ppa:oisf/suricata-stable && \
     apt update \
     apt install suricata \
-    apt remove --purge software-propties-common \
+    apt remove --purge software-properties-common \
     apt autoremove \
     apt autoclean
 

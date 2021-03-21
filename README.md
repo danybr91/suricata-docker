@@ -2,9 +2,13 @@
 
 ## Build
 
-Recomiendo usar la version de alpine, que es mucho más ligera:
+La version de alpine, es mucho más ligera pero compila suricata:
 	
 	docker build . -t $(cat TAG)
+
+También hay una versión con ubuntu 	ue usa el PPA con la versión más reciente:
+
+	docker build . -f "Dockerfile.ubuntu" -t $(cat TAG)
 
 ## Usage
 
