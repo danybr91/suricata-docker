@@ -8,7 +8,7 @@ La version de alpine, es mucho más ligera pero compila suricata:
 
 También hay una versión con ubuntu 	ue usa el PPA con la versión más reciente:
 
-	docker build . -f "Dockerfile.ubuntu" -t $(cat TAG)
+	docker build . -f Dockerfile.ubuntu -t $(cat TAG)
 
 ## Usage
 
