@@ -23,8 +23,6 @@ COPY config/ /etc/suricata/
 # Programar cron
 COPY suricata-update.cron /etc/crontabs/suricata-update-cron
 RUN chmod +x /etc/crontabs/suricata-update-cron
-# Activar el servicio
-RUN crond && crontab /etc/crontabs/suricata-update-cron
 
 # Forwarding suricata application logs to stdout
 RUN ln -sf /dev/stdout /var/log/suricata/suricata.log
@@ -50,10 +48,13 @@ RUN ln -sf /dev/stdout /var/log/suricata/suricata.log
 #RUN apt-get install -y libcap2-bin
 #RUN setcap cap_net_raw+ep /usr/local/bin/suricata && setcap cap_net_admin+ep /usr/local/bin/suricata
 
+# Activar el CTRL + C en el modo interactivo
+STOPSIGNAL SIGINT
 
 # Inicio del contenedor
-STOPSIGNAL SIGINT
-ENTRYPOINT [ "/usr/local/bin/suricata", "-c", "/etc/suricata/suricata.yaml" ]
+COPY entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "--af-packet" ]
 
 #shell available mode
