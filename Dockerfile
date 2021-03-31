@@ -21,7 +21,7 @@ COPY config/ /etc/suricata/
 #COPY suricata-update.cron /etc/periodic/daily/suricata
 #RUN /usr/bin/chmod +x /etc/periodic/daily/suricata
 # Programar cron
-COPY suricata-update-cron /etc/crontabs/suricata-update-cron
+COPY suricata-update.cron /etc/crontabs/suricata-update-cron
 RUN chmod +x /etc/crontabs/suricata-update-cron
 # Activar el servicio
 RUN crond && crontab /etc/crontabs/suricata-update-cron
