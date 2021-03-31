@@ -26,6 +26,7 @@ RUN chmod +x /etc/crontabs/suricata-update-cron
 
 # Forwarding suricata application logs to stdout
 RUN ln -sf /dev/stdout /var/log/suricata/suricata.log
+RUN ln -sf /dev/stdout /var/log/suricata/fast.log
 
 # Permitir a suricata crear sockets sin permisos de root:
 #
