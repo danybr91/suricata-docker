@@ -3,7 +3,7 @@
 FROM alpine:latest
 
 # Configurar el sistema
-RUN apk add timezone --no-cache && \
+RUN apk add tzdata --no-cache && \
     cp /usr/share/zoneinfo/Europe/Madrid /etc/localtime && \
     echo "Europe/Brussels" >  /etc/timezone
 
