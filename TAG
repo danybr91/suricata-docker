@@ -1,1 +1,1 @@
-suricata:4.0.4
+suricata:latest

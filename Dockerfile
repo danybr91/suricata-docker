@@ -1,122 +1,32 @@
+# Fichero de despliegue de suricata más básico, con suricata precompilado desde el repositorio de alpine.
 # Imagen base
 FROM alpine:latest
-
-# Dependencias del sistema
-RUN  apk -U --no-cache add \
-		geoip \
-		hiredis \
-		jansson \
-		libcap-ng \
-		libgcc \
-		libhtp \
-		libmagic \
-		libnet \
-		libnetfilter_queue \
-		libnfnetlink \
-		libpcap \
-		luajit \
-		lz4-libs \
-		musl \
-		nspr \
-		nss \
-		pcre \
-		py-yaml \
-		python2 \
-		#python3 \
-		#py3-pip \
-		yaml \
-		zlib \
-		# openresty \
-		ca-certificates \
-		wget \
-		curl \
-		tzdata \
-		automake \
-		autoconf \
-		file-dev \
-		build-base \
-		cargo \
-		geoip-dev \
-		hiredis-dev \
-		jansson-dev \
-		libtool \
-		libhtp-dev \
-		libcap-ng-dev \
-		luajit-dev \
-		libpcap-dev \
-		libnet-dev \
-		libnetfilter_queue-dev \
-		libnfnetlink-dev \
-		lz4-dev \
-		nss-dev \
-		nspr-dev \
-		pcre-dev \
-		rust \
-		yaml-dev
-    #&& python3 -m pip install --no-cache-dir --upgrade pip \
-    #&& python3 -m pip install --no-cache-dir suricata-update
 
 # Configurar el sistema
 RUN cp /usr/share/zoneinfo/Europe/Madrid /etc/localtime && \
     echo "Europe/Brussels" >  /etc/timezone
 
-# Instalar suricata
-# --disable-gccmarch-native
-# no optimiza el binario para el sistema. Adecuado para instalación portable o VM.
-RUN mkdir -p /opt/suricata/ && \
-    wget https://www.openinfosecfoundation.org/download/suricata-4.1.4.tar.gz && \
-    tar xvfz suricata-4.1.4.tar.gz --strip-components=1 -C /opt/suricata/
-    
-WORKDIR /opt/suricata
-RUN ./configure \
-	--sysconfdir=/etc \
-	--localstatedir=/var \
-	--disable-gccmarch-native \
-	--enable-nfqueue \
-	#--disable-rust \
-	--enable-hiredis \
-	--enable-gccprotect \
-	--enable-pie \
-	#--enable-lua \
-	--enable-geoip \
-	--enable-luajit \
-    && make && \
-    make check && \
-    make install && \
-    make install-full
+# Dependencias del sistema
+#https://pkgs.alpinelinux.org/package/edge/community/x86/suricata
+RUN apk add suricata --no-cache
+
+# Install Suricata-update utility https://github.com/OISF/suricata-update
+#RUN apk add python py-pip && pip install suricata-update
 
 # Configurar suricata
 COPY config/ /etc/suricata/
 
-# Por defecto se realizan actualizaciones diarias
-COPY suricata-update.cron /etc/periodic/daily/suricata
-RUN /usr/bin/chmod +x /etc/periodic/daily/suricata
+# Actualizaciones diarias
+#COPY suricata-update.cron /etc/periodic/daily/suricata
+#RUN /usr/bin/chmod +x /etc/periodic/daily/suricata
+# Programar cron
+COPY suricata-update-cron /etc/crontabs/suricata-update-cron
+RUN chmod +x /etc/crontabs/suricata-update-cron
+# Activar el servicio
+RUN crond && crontab /etc/crontabs/suricata-update-cron
 
-# Limpiar
-RUN cd ~ && rm -r /opt/suricata && \
-    rm /suricata-4.1.4.tar.gz && \
-    apk -U --no-cache del \
-		tzdata \
-		automake \
-		autoconf \
-		file-dev \
-		build-base \
-		geoip-dev \
-		hiredis-dev \
-		jansson-dev \
-		libtool \
-		libhtp-dev \
-		libcap-ng-dev \
-		luajit-dev \
-		libpcap-dev \
-		libnet-dev \
-		libnetfilter_queue-dev \
-		libnfnetlink-dev \
-		lz4-dev \
-		nss-dev \
-		nspr-dev \
-		pcre-dev \
-		yaml-dev 
+# Forwarding suricata application logs to stdout
+RUN ln -sf /dev/stdout /var/log/suricata/suricata.log
 
 # Permitir a suricata crear sockets sin permisos de root:
 #
@@ -136,7 +46,9 @@ RUN cd ~ && rm -r /opt/suricata && \
 # card into promiscuous mode to capture traffic, etc.) but also firewalling
 # (don't miss this one!) and routing tables (allows to route traffic through a 
 # malicious host).
-RUN apk -U --no-cache add libcap && /usr/sbin/setcap cap_net_raw+ep cap_net_admin+ep /usr/local/bin/suricata
+#RUN apt-get install -y libcap2-bin
+#RUN setcap cap_net_raw+ep /usr/local/bin/suricata && setcap cap_net_admin+ep /usr/local/bin/suricata
+
 
 # Inicio del contenedor
 STOPSIGNAL SIGINT
@@ -150,3 +62,4 @@ CMD [ "--af-packet" ]
 #https://github.com/dtag-dev-sec/tpotce/tree/master/docker/suricata
 #https://docs.docker.com/get-started/
 #https://docs.docker.com/get-started/part2
+#https://github.com/julienyvenat/docker-suricata/blob/master/alpine/Dockerfile/Dockerfile
