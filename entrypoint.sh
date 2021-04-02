@@ -10,4 +10,5 @@ crond
 crontab /etc/crontabs/suricata-update-cron
 
 # Start suricata (and pass extra arguments from CMD)
-suricata -c /etc/suricata/suricata.yaml "$@"
+# pidfile is required for logrotate
+suricata -c /etc/suricata/suricata.yaml --pidfile /var/run/suricata.pid "$@"

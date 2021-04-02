@@ -3,7 +3,7 @@
 FROM alpine:latest
 
 # Configurar el sistema
-RUN apk add tzdata --no-cache && \
+RUN apk add tzdata vim --no-cache && \
     cp /usr/share/zoneinfo/Europe/Madrid /etc/localtime && \
     echo "Europe/Brussels" >  /etc/timezone
 
@@ -24,9 +24,15 @@ COPY config/ /etc/suricata/
 COPY suricata-update.cron /etc/crontabs/suricata-update-cron
 RUN chmod +x /etc/crontabs/suricata-update-cron
 
+# Utilidades para rotar los logs
+RUN apk add logrotate --no-cache
+COPY logrotate.conf /etc/logrotate.d/suricata
+
 # Forwarding suricata application logs to stdout
-RUN ln -sf /dev/stdout /var/log/suricata/suricata.log
-RUN ln -sf /dev/stdout /var/log/suricata/fast.log
+# Enabled by default
+#RUN ln -sf /dev/stdout /var/log/suricata/suricata.log
+# Optional/Experimental (not recommended)
+#RUN ln -sf /dev/stdout /var/log/suricata/fast.log
 
 # Permitir a suricata crear sockets sin permisos de root:
 #
