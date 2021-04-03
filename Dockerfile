@@ -27,6 +27,7 @@ RUN chmod +x /etc/crontabs/suricata-update-cron
 # Utilidades para rotar los logs
 RUN apk add logrotate --no-cache
 COPY logrotate.conf /etc/logrotate.d/suricata
+RUN chmod 0644 /etc/logrotate.d/suricata
 
 # Forwarding suricata application logs to stdout
 # Enabled by default
