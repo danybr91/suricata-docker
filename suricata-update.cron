@@ -1,1 +1,1 @@
-0 0 * * * /etc/suricata/suricata-update.sh > /dev/null 2>&1
+0 0 * * * /etc/suricata/suricata-update.sh >> /var/log/suricata/update.log 2>&1
