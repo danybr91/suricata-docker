@@ -33,8 +33,8 @@ ARG DEBIAN_FRONTEND
 ARG TZ
 
 # Dependencias de compilación. Recomendadas por https://suricata.readthedocs.io/en/latest/install.html#install-advanced y algunas adicionales:
-# - libmaxminddb-dev: necesario si se usa GeoIP.•libhtp-devnecesario para ejecutar el binario compilado.
-#- liblz4-dev: para comprimir ficheros pcap de log generados.
+# - libmaxminddb-dev: necesario si se usa GeoIP.•libhtp-dev necesario para ejecutar el binario compilado.
+# - liblz4-dev: para comprimir ficheros pcap de log generados.
 RUN apt update && apt install -y \
 	build-essential gcc \
 	libpcre3-dbg libpcre3-dev libpcap-dev libyaml-dev pkg-config zlib1g-dev libcap-ng-dev libmagic-dev libnss3-dev libjansson-dev libgeoip-dev liblua5.1-dev libhiredis-dev libevent-dev libmaxminddb-dev libhtp-dev cargo rustc

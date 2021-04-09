@@ -23,6 +23,7 @@ COPY config/ /etc/suricata/
 # Programar cron
 COPY suricata-update.cron /etc/crontabs/suricata-update-cron
 RUN chmod +x /etc/crontabs/suricata-update-cron
+COPY suricata-update.sh /suricata-update-script.sh
 
 # Utilidades para rotar los logs
 RUN apk add logrotate --no-cache
