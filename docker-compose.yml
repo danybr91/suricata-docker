@@ -1,6 +1,11 @@
 # https://docs.docker.com/compose/compose-file/compose-file-v2/
 version: '2'
 
+volumes:
+  suricata-config:
+  suricata-rules:
+  #suricata-log:
+
 services:
 # Suricata service
   suricata:
@@ -9,7 +14,7 @@ services:
       context: .
       dockerfile: Dockerfile
     network_mode: "host"
-    enviroment:
+    environment:
       TZ: "Europe/Madrid"
     volumes:
       # Volume mode
@@ -20,8 +25,8 @@ services:
       #- '/opt/suricata/config/:/etc/suricata'
       #- '/opt/suricata/rules:/var/lib/suricata'
       - '/var/log/docker/suricata:/var/log/suricata'
-     cap_add:
+    cap_add:
       - NET_ADMIN
       - SYS_NICE
       - NET_RAW
-     restart: unless-stopped
+    restart: unless-stopped
