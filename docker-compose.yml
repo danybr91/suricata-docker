@@ -10,13 +10,14 @@ services:
 # Suricata service
   suricata:
     container_name: suricata
+    image: suricata:latest
     build:
       context: .
       dockerfile: Dockerfile
     network_mode: "host"
     environment:
       TZ: "Europe/Madrid"
-      SURICATA_ARGS: "-i eth0 --af-packet"
+      SURICATA_ARGS: "--af-packet"
     volumes:
       # Volume mode
       - 'suricata-config:/etc/suricata'

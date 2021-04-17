@@ -67,8 +67,6 @@ STOPSIGNAL SIGINT
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
-
-ENV SURICATA_ARGS="--af-packet"
 CMD [ "--af-packet" ]
 
 #Ref:
