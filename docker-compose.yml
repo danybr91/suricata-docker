@@ -20,10 +20,6 @@ services:
         # Obtiene el valor desde el ENV de docker-compose
         TZ: "${TZ}"
     network_mode: "host"
-    environment:
-      # Obtiene el valor desde el ENV de docker-compose
-      TZ:
-      SURICATA_ARGS:
     volumes:
       # Volume mode
       - 'suricata-config:/etc/suricata'

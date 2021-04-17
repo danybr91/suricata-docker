@@ -11,12 +11,11 @@ crond
 # Add cronjob
 crontab /etc/crontabs/suricata-update-cron
 
-# Start suricata (and pass extra arguments from CMD)
+
 # pidfile is required for logrotate
 if [ -f /var/run/suricata.pid ]; then
     rm -f /var/run/suricata.pid
 fi
 
-# Esta versión tiene en cuenta los argumentos CMD
+# Start suricata (and pass extra arguments from CMD)
 suricata -c /etc/suricata/suricata.yaml --pidfile /var/run/suricata.pid "$@"
-#suricata -c /etc/suricata/suricata.yaml --pidfile /var/run/suricata.pid "$SURICATA_ARGS"

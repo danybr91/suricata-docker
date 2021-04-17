@@ -24,6 +24,20 @@ Lanzar el contenedor creandos dos volúmenes para la configuración y las reglas
 
 	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -v suricata_config:/etc/suricata -v suricata_rules:/var/lib/suricata/rules -v /var/log/docker/suricata:/var/log/suricata suricata -i <interface>
 
+## Docker compose
+
+Compilar la imagen y jecutar suricata con los parámetros deseados:
+
+	export TZ="Europe/Madrid"
+	docker-compose build
+	
+	export SURICATA_ARGS="-i eth0"
+	docker-compose up
+
+Verificar el fichero docker-compose.yml:
+
+	docker-compose -f docker-compose.yml config
+
 ## Actualizar firmas
 
 El contenedor dispone de una tarea cron que le permite actualizar las firmas de forma regular. Puedes configurar la periocidad editando el archivo update.cron. Adicionalmente, puedes ejecutar una actualización manual en cualquier momento con:
