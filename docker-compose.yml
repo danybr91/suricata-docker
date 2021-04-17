@@ -1,19 +1,27 @@
-version: '2.3'
+# https://docs.docker.com/compose/compose-file/compose-file-v2/
+version: '2'
 
 services:
 # Suricata service
   suricata:
-    build: .
     container_name: suricata
-    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
     network_mode: "host"
-    cap_add:
-     - NET_ADMIN
-     - SYS_NICE
-     - NET_RAW
-    image: ""
+    enviroment:
+      TZ: "Europe/Madrid"
     volumes:
-     - /var/log/suricata:/var/log/suricata
-     - /etc/suricata:/etc/suricata
-
-#Ref: https://github.com/dtag-dev-sec/tpotce
+      # Volume mode
+      - 'suricata-config:/etc/suricata'
+      - 'suricata-rules:/var/lib/suricata'
+      #- 'suricata-log/var/log/suricata'
+      # Mount bind mode
+      #- '/opt/suricata/config/:/etc/suricata'
+      #- '/opt/suricata/rules:/var/lib/suricata'
+      - '/var/log/docker/suricata:/var/log/suricata'
+     cap_add:
+      - NET_ADMIN
+      - SYS_NICE
+      - NET_RAW
+     restart: unless-stopped
