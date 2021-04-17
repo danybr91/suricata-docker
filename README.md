@@ -6,11 +6,7 @@ La version de alpine, es mucho más ligera pero usa suricata desde el repositori
 	
 	docker build . -t $(cat TAG)
 
-También hay una versión con ubuntu que usa el PPA con la versión más reciente:
-
-	docker build . -f Dockerfile.ubuntu -t $(cat TAG)
-
-Finalmente hay una versión con ubuntu que compila el fuente:
+Existe una versión alternativa con ubuntu que compila el fuente (Experimental):
 
 	docker build . -f Dockerfile -t $(cat TAG) --target "suricata" --build-arg version=$(cat VERSION)
 
@@ -18,15 +14,15 @@ Finalmente hay una versión con ubuntu que compila el fuente:
 
 Ejecutar suricata en primer plano:
 
-    docker run -it --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW suricata -i <interface>
+	docker run -it --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -e INTERFACE=<interface> suricata
 
 Lanzar el contenedor sin ventana interactiva y en segundo plano:
 
-	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW suricata -i <interface>
+	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -e INTERFACE=<interface> suricata
 
 Lanzar el contenedor creandos dos volúmenes para la configuración y las reglas y un bind mount para logs (por ejemplo):
 
-	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -v suricata_config:/etc/suricata -v suricata_rules:/var/lib/suricata/rules -v /var/log/docker/suricata:/var/log/suricata  suricata -i <interface>
+	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -v suricata_config:/etc/suricata -v suricata_rules:/var/lib/suricata/rules -v /var/log/docker/suricata:/var/log/suricata  -e INTERFACE=<interface> suricata
 
 ## Actualizar firmas
 

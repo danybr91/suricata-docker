@@ -2,10 +2,12 @@
 # Imagen base
 FROM alpine:latest
 
+ENV TZ="Europe/Madrid"
+
 # Configurar el sistema
 RUN apk add tzdata vim --no-cache && \
     cp /usr/share/zoneinfo/Europe/Madrid /etc/localtime && \
-    echo "Europe/Brussels" >  /etc/timezone
+    echo "$TZ" >  /etc/timezone
 
 # Dependencias del sistema
 #https://pkgs.alpinelinux.org/package/edge/community/x86/suricata
@@ -61,13 +63,13 @@ RUN chmod 0644 /etc/logrotate.d/suricata
 STOPSIGNAL SIGINT
 
 # Inicio del contenedor
+
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
-CMD [ "--af-packet" ]
 
-#shell available mode
-#CMD suricata -c /etc/suricata/suricata.yaml --af-packet=enp0s3
+ENV SURICATA_ARGS="--af-packet"
+CMD [ "--af-packet" ]
 
 #Ref:
 #https://github.com/dtag-dev-sec/tpotce/tree/master/docker/suricata

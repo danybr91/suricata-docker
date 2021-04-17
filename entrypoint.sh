@@ -16,4 +16,8 @@ crontab /etc/crontabs/suricata-update-cron
 if [ -f /var/run/suricata.pid ]; then
     rm -f /var/run/suricata.pid
 fi
-suricata -c /etc/suricata/suricata.yaml --pidfile /var/run/suricata.pid "$@"
+
+# Esta versión tiene en cuenta los argumentos CMD
+#suricata -c /etc/suricata/suricata.yaml --pidfile /var/run/suricata.pid "$@"
+# Esta versión tiene en cuenta el entorno ENV
+suricata -c /etc/suricata/suricata.yaml --pidfile /var/run/suricata.pid "$SURICATA_ARGS"

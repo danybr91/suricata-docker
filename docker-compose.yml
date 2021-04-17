@@ -16,6 +16,7 @@ services:
     network_mode: "host"
     environment:
       TZ: "Europe/Madrid"
+      SURICATA_ARGS: "-i eth0 --af-packet"
     volumes:
       # Volume mode
       - 'suricata-config:/etc/suricata'
