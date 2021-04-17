@@ -2,7 +2,7 @@
 # Imagen base
 FROM alpine:latest
 
-ARG TZ="Europe/Madrid"
+ARG TZ
 
 # Configurar el sistema
 RUN apk add tzdata vim --no-cache && \
