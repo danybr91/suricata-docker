@@ -29,9 +29,9 @@ Lanzar el contenedor creandos dos volúmenes para la configuración y las reglas
 Compilar la imagen y jecutar suricata con los parámetros deseados:
 
 	export TZ="Europe/Madrid"
-	docker-compose build
-	
 	export SURICATA_ARGS="-i eth0"
+	
+	docker-compose build
 	docker-compose up
 
 Verificar el fichero docker-compose.yml:
