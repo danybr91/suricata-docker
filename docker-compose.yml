@@ -11,14 +11,19 @@ services:
   suricata:
     container_name: suricata
     image: suricata:latest
+    #Obtiene el valor desde el ENV de docker-compose
+    command: "${SURICATA_ARGS}"
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        TZ: "Europe/Madrid"
+        # Obtiene el valor desde el ENV de docker-compose
+        TZ: "${TZ}"
     network_mode: "host"
     environment:
-      SURICATA_ARGS: ""
+      # Obtiene el valor desde el ENV de docker-compose
+      TZ:
+      SURICATA_ARGS:
     volumes:
       # Volume mode
       - 'suricata-config:/etc/suricata'

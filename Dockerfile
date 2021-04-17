@@ -67,7 +67,7 @@ STOPSIGNAL SIGINT
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
-#CMD [ "--af-packet" ]
+CMD [ "--af-packet" ]
 
 #Ref:
 #https://github.com/dtag-dev-sec/tpotce/tree/master/docker/suricata
