@@ -24,7 +24,7 @@ services:
       # Volume mode
       - 'suricata_config:/etc/suricata'
       - 'suricata_rules:/var/lib/suricata'
-      #- 'suricata-log/var/log/suricata'
+      #- 'suricata_log:/var/log/suricata'
       # Mount bind mode
       #- '/opt/suricata/config/:/etc/suricata'
       #- '/opt/suricata/rules:/var/lib/suricata'

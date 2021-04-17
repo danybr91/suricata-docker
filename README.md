@@ -34,6 +34,8 @@ Compilar la imagen y jecutar suricata con los parámetros deseados:
 	docker-compose build
 	docker-compose up
 
+Nota: añadir "--detach" a docker-compose up para no mantener abierto el log de suricata
+
 Verificar el fichero docker-compose.yml:
 
 	docker-compose -f docker-compose.yml config
