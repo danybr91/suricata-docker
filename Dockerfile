@@ -2,7 +2,7 @@
 # Imagen base
 FROM alpine:latest
 
-ENV TZ="Europe/Madrid"
+ARG TZ="Europe/Madrid"
 
 # Configurar el sistema
 RUN apk add tzdata vim --no-cache && \
@@ -67,7 +67,7 @@ STOPSIGNAL SIGINT
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
-CMD [ "--af-packet" ]
+#CMD [ "--af-packet" ]
 
 #Ref:
 #https://github.com/dtag-dev-sec/tpotce/tree/master/docker/suricata

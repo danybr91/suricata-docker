@@ -14,10 +14,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        TZ: "Europe/Madrid"
     network_mode: "host"
     environment:
-      TZ: "Europe/Madrid"
-      SURICATA_ARGS: "--af-packet"
+      SURICATA_ARGS: ""
     volumes:
       # Volume mode
       - 'suricata-config:/etc/suricata'

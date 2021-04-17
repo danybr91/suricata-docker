@@ -14,15 +14,18 @@ Existe una versión alternativa con ubuntu que compila el fuente (Experimental):
 
 Ejecutar suricata en primer plano:
 
-	docker run -it --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -e INTERFACE=<interface> suricata
+	docker run -it --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -e SURICATA_ARGS="-i <interface> --af-packet" suricata
 
 Lanzar el contenedor sin ventana interactiva y en segundo plano:
 
-	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -e INTERFACE=<interface> suricata
+	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -e SURICATA_ARGS="-i <interface> --af-packet" suricata
 
 Lanzar el contenedor creandos dos volúmenes para la configuración y las reglas y un bind mount para logs (por ejemplo):
 
-	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -v suricata_config:/etc/suricata -v suricata_rules:/var/lib/suricata/rules -v /var/log/docker/suricata:/var/log/suricata  -e INTERFACE=<interface> suricata
+	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -v suricata_config:/etc/suricata -v suricata_rules:/var/lib/suricata/rules -v /var/log/docker/suricata:/var/log/suricata  -e SURICATA_ARGS="-i <interface> --af-packet" suricata
+
+
+La variable de entorno SURICATA_ARGS especifica los parámetros de suricata, simulando el comando CMD. Si no especificas nada, por defecto se utilizará la configuración.
 
 ## Actualizar firmas
 
