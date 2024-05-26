@@ -2,7 +2,7 @@
 version: '2'
 
 volumes:
-  suricata_config:
+  #suricata_config:
   suricata_rules:
   #suricata-log:
 
@@ -12,21 +12,15 @@ services:
     container_name: suricata
     image: suricata:latest
     #Obtiene el valor desde el ENV de docker-compose
-    command: "${SURICATA_ARGS}"
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        # Obtiene el valor desde el ENV de docker-compose
-        TZ: "${TZ}"
+    command: "-i eth0.1 -F /etc/suricata/capture-filter.bpf"
     network_mode: "host"
     volumes:
       # Volume mode
-      - 'suricata_config:/etc/suricata'
+      #- 'suricata_config:/etc/suricata'
       - 'suricata_rules:/var/lib/suricata'
       #- 'suricata_log:/var/log/suricata'
       # Mount bind mode
-      #- '/opt/suricata/config/:/etc/suricata'
+      - '/opt/suricata/config:/etc/suricata'
       #- '/opt/suricata/rules:/var/lib/suricata'
       - '/var/log/docker/suricata:/var/log/suricata'
     cap_add:
