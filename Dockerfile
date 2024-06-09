@@ -3,15 +3,16 @@
 FROM alpine:latest
 
 ARG TZ
+ARG VERSION
 
 # Configurar el sistema
 RUN apk add tzdata vim --no-cache && \
-    cp /usr/share/zoneinfo/Europe/Madrid /etc/localtime && \
+    cp /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     echo "$TZ" >  /etc/timezone
 
 # Dependencias del sistema
 #https://pkgs.alpinelinux.org/package/edge/community/x86/suricata
-RUN apk add suricata --no-cache
+RUN apk add suricata=$VERSION --no-cache
 
 # Install Suricata-update utility https://github.com/OISF/suricata-update
 #RUN apk add python py-pip && pip install suricata-update
@@ -23,14 +24,15 @@ COPY config/ /etc/suricata/
 #COPY suricata-update.cron /etc/periodic/daily/suricata
 #RUN /usr/bin/chmod +x /etc/periodic/daily/suricata
 # Programar cron
+COPY logrotate.cron /etc/crontabs/logrotate-cron
+RUN chmod +x /etc/crontabs/logrotate-cron
+
 COPY suricata-update.cron /etc/crontabs/suricata-update-cron
 RUN chmod +x /etc/crontabs/suricata-update-cron
 COPY suricata-update.sh /suricata-update-script.sh
 
 # Utilidades para rotar los logs
 RUN apk add logrotate --no-cache
-COPY logrotate.conf /etc/logrotate.d/suricata
-RUN chmod 0644 /etc/logrotate.d/suricata
 
 # Forwarding suricata application logs to stdout
 # Enabled by default

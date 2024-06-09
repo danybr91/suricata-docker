@@ -4,41 +4,28 @@
 
 La version de alpine, es mucho más ligera pero usa suricata desde el repositorio de la comunidad:
 	
-	docker build . -t $(cat TAG)
+    docker build . --network host -t $(cat TAG) --platform linux/amd64, linux/arm64 --build-arg="TZ=Europe/Madrid" --build-arg="VERSION=$(cat TAG | awk -F ':' {print $2}')"
 
 Existe una versión alternativa con ubuntu que compila el fuente (Experimental):
 
-	docker build . -f Dockerfile -t $(cat TAG) --target "suricata" --build-arg version=$(cat VERSION)
+    docker build . -t Dockerfile.build --network host -t $(cat TAG) --platform linux/amd64, linux/arm64 --build-arg="TZ=Europe/Madrid" --build-arg="VERSION=$(cat TAG | awk -F ':' '{print $2}')"
 
 ## Usage
 
-Ejecutar suricata en primer plano:
+Ejecutar suricata:
 
-	docker run -it --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW suricata -i <interface>
-
-Lanzar el contenedor sin ventana interactiva y en segundo plano:
-
-	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW suricata -i <interface>
-
-Lanzar el contenedor creandos dos volúmenes para la configuración y las reglas y un bind mount para logs (por ejemplo):
-
-	docker run -d --net=host --cap-add=NET_ADMIN --cap-add=NET_RAW -v suricata_config:/etc/suricata -v suricata_rules:/var/lib/suricata/rules -v /var/log/docker/suricata:/var/log/suricata suricata -i <interface>
-
-## Docker compose
-
-Compilar la imagen y jecutar suricata con los parámetros deseados:
-
-	export TZ="Europe/Madrid"
-	export SURICATA_ARGS="-i eth0"
-	
-	docker-compose build
-	docker-compose up
-
-Nota: añadir "--detach" a docker-compose up para no mantener abierto el log de suricata
-
-Verificar el fichero docker-compose.yml:
-
-	docker-compose -f docker-compose.yml config
+	docker run -d --name suricata \
+	--network host \
+	--cap-add NET_ADMIN \
+	--cap-add SYS_NICE \
+	--cap-add NET_RAW \
+	-v ./config:/etc/suricata \
+	-v ./logs:/var/log/suricata \
+	-v 'suricata_rules:/var/lib/suricata' \
+	-v 'suricata_unix:/run/suricata' \
+	--restart unless-stopped \
+	suricata:<VERSION> \
+	-i <interface> -F /etc/suricata/capture-filter.bpf
 
 ## Actualizar firmas
 
